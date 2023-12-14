@@ -1,0 +1,33 @@
+.loginNavbar {
+    background-color: #e2e2e2;
+    padding: 10px 0;
+    font-size: x-small;
+  }
+  
+  .loginNavbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .loginNavbar li {
+    border-right: 1px solid rgb(0, 0, 0);
+    padding: 0 10px; 
+  }
+
+  .loginNavbar li:last-child {
+    margin-right: 250px;
+    border-right: none;
+  }
+  
+  .loginNavbar a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-family: Helvetica-Neue, Helvetica, Arial, sans-serif;
+  }
+  
+  .loginNavbar a:hover {
+    color: #464646;
+  }
