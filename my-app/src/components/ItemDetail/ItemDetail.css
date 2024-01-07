@@ -1,0 +1,96 @@
+.main-image {
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+.thumbnail-images {
+    max-width: 50px;
+    max-height: 50px;
+    display: flex;
+    flex-direction: row;
+}
+
+.thumbnail-image {
+    max-width: 50px;
+    max-height: 50px;
+    margin: 0 10px;
+}
+
+.selected-thumbnail {
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.thumbnail-images-colors {
+    max-width: 50px;
+    max-height: 50px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.price  {
+    font-size: 20px !important;
+    font-weight: bold !important;
+}
+
+.color-selection {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.color-option {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.color-option:hover {
+  background-color: #e0e0e0;
+}
+
+.selected-color {
+  font-weight: bold;
+  background-color: #838383;
+}
+
+.itemTitle {
+  font-size: 25px !important;
+}
+
+.itemPrice {
+  font-size: 18px !important;
+  font-weight: bold !important;
+  margin-top: 10px !important;
+}
+
+.color-images {
+  max-width: 10px;
+  max-height: 10px;
+}
+
+.shoe-size {
+  margin: -13px;
+  margin-top: 15px;
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+.shoe-sizes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.selected-size {
+  color: red;
+}
