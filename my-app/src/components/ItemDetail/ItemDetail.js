@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ItemDetail.css';
 
 function ItemDetail() {
   let { id } = useParams();
+  let navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [uniqueColors, setUniqueColors] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
 
   const [itemTitle, setItemTitle] = useState(null);
   const [itemPrice, setItemPrice] = useState(null);
+
+  useEffect(() => {
+    // Check if id is a number
+    if (isNaN(id)) {
+      // If id is not a number, navigate to home page
+      navigate('/');
+    }
+    // Rest of your useEffect code...
+  }, [id, navigate]);
 
   useEffect(() => {
     const colors = items.flatMap(item => item.product.color);
@@ -32,6 +43,10 @@ function ItemDetail() {
   }, [items, selectedColor]);
 
   useEffect(() => {
+    setSelectedSize(null); // Reset the selected size when the selected color changes
+  }, [selectedColor]);
+
+  useEffect(() => {
     axios.get(`http://localhost:8000/api/products/${id}`)
       .then(response => {
         setItems(response.data.data);
@@ -40,8 +55,10 @@ function ItemDetail() {
       })
       .catch(error => {
         console.error('There was an error!', error);
+        navigate('/');
+        return;
       });
-  }, [id]);
+  }, [id, navigate]);
 
   if (!items) {
     return <div>Item doesn't exist.</div>;
@@ -92,45 +109,56 @@ function ItemDetail() {
             );
           })}
         </div>
+        <br />
 
+        <div>
+          <div className="shoe-sizes">
+            {(() => {
+              const sizes = Array.from({length: 23}, (_, i) => (i * 0.5) + 4).filter(size => size <= 13.5);
+              return sizes.map(size => {
+                const isSelectable = items.some(item => selectedColor === item.product.color && item.items_inventory.some(inventoryItem => inventoryItem.size === size.toString()));
+                const isSelected = size === selectedSize;
+                return (
+                  <button 
+                    key={size} 
+                    className={`shoe-size ${isSelectable ? 'selected-size' : 'unclickable'} ${isSelected ? 'selected' : ''}`}
+                    onClick={() => {
+                      if (isSelectable) {
+                        setSelectedSize(size);
+                      }
+                    }}
+                  >
+                    {size}
+                  </button>
+                );
+              });
+            })()}
+          </div>
 
-        <div className="shoe-sizes">
-          {items.map(item => (
-            Array.from({length: 19}, (_, i) => (i * 0.5) + 4).filter(size => size <= 13.5).map(size => {
-              const isSelectedSize = selectedColor === item.product.color && item.items_inventory.some(inventoryItem => inventoryItem.size === size.toString());
-              return (
-                <div 
-                  key={size} 
-                  className={`shoe-size ${isSelectedSize ? 'selected-size' : ''}`}
-                  onClick={() => {
-                    if (isSelectedSize) {
-                      // Ejecuta la acción que quieras cuando se selecciona un tamaño
-                    }
-                  }}
-                >
-                  {size}
-                </div>
-              );
-            })
-          ))}
-          {[14, 15].map(size => (
-            items.map(item => {
-              const isSelectedSize = selectedColor === item.product.color && item.items_inventory.some(inventoryItem => inventoryItem.size === size.toString());
-              return (
-                <div 
-                  key={size} 
-                  className={`shoe-size ${isSelectedSize ? 'selected-size' : ''}`}
-                  onClick={() => {
-                    if (isSelectedSize) {
-                      // Ejecuta la acción que quieras cuando se selecciona un tamaño
-                    }
-                  }}
-                >
-                  {size}
-                </div>
-              );
-            })
-          ))}
+          <div className="shoe-sizes">
+            {(() => {
+              const sizes = [14, 15];
+              return sizes.map(size => {
+                const isSelectable = items.some(item => selectedColor === item.product.color && item.items_inventory.some(inventoryItem => inventoryItem.size === size.toString()));
+                const isSelected = size === selectedSize;
+                return (
+                  <button 
+                    key={size} 
+                    className={`shoe-size ${isSelectable ? 'selected-size' : 'unclickable'} ${isSelected ? 'selected' : ''}`}
+                    onClick={() => {
+                      if (isSelectable) {
+                        setSelectedSize(size);
+                      }
+                    }}
+                  >
+                    {size}
+                  </button>
+                );
+              });
+            })()}
+          </div>
+
+          
         </div>
 
       </div>

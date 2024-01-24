@@ -9,6 +9,7 @@ function Catalog({gender}) {
 
   useEffect(() => {
     const getItems = async () => {
+      console.log()
       try {
         const items = await fetchItems(gender);
         setItems(items);

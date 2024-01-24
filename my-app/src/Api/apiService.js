@@ -11,8 +11,8 @@ export const fetchItems = async (gender) => {
 
     const response = await axios.get(BASE_URL + 'api/', {
       params: params
-      
     });
+    console.log(response)
     return response.data.data;
   } catch (error) {
     throw error;

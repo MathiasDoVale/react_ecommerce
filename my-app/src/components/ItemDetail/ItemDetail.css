@@ -1,7 +1,17 @@
 .main-image {
-    max-width: 500px;
-    max-height: 500px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px; /* Cambia a 100% para que el contenedor ocupe todo el ancho disponible */
+  height: 500px; /* Cambia a auto para que la altura se ajuste automáticamente para mantener el aspecto de la imagen */
+  overflow: hidden;
+}
+
+.main-image img {
+  width: 100%;
+  height: auto; /* Cambia a auto para que la altura se ajuste automáticamente para mantener el aspecto de la imagen */
+  object-fit: cover;
+}
 
 .thumbnail-images {
     max-width: 50px;
@@ -73,24 +83,42 @@
   max-height: 10px;
 }
 
-.shoe-size {
-  margin: -13px;
-  margin-top: 15px;
-  width: 30px;
-  height: 30px;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #000;
-  border-radius: 5px;
+.shoe-sizes {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.shoe-sizes {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+.shoe-size {
+  flex: 1 1 15%;
+  margin: 0.3em;
+  padding: 0.3em;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .shoe-size {
+    flex: 1 0 46%; /* En pantallas más pequeñas, solo se mostrarán 2 elementos por fila */
+  }
+}
+
+@media (max-width: 480px) {
+  .shoe-size {
+    flex: 1 0 96%; /* En pantallas muy pequeñas, solo se mostrará 1 elemento por fila */
+  }
 }
 
 .selected-size {
-  color: red;
+  color: black;
+}
+
+.unclickable {
+  pointer-events: none;
+  opacity: 0.4; /* Opcional: reduce la opacidad para indicar que el elemento no es clickeable */
+}
+
+.selected {
+  background-color: rgb(97, 141, 97);
 }
