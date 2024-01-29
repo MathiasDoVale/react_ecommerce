@@ -60,3 +60,12 @@
     margin-top: 30%;
     font-family: Helvetica-Neue,Fabriga,-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;;
   }
+
+  a:-webkit-any-link {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.grid-container > div {
+  align-self: start; /* Cambia esto según tus necesidades */
+}

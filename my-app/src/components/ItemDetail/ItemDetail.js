@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { fetchCartItems } from '../../Api/apiService';
+import Cart from '../Cart/Cart';
+import { addItemToCart } from '../../Api/apiService';
 import './ItemDetail.css';
 
 function ItemDetail() {
+  const firstUpdate = useRef(true);
   let { id } = useParams();
   let navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -11,9 +15,16 @@ function ItemDetail() {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-
+  const [productIdSelected, setProductIdSelected] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartItemsChanged, setCartItemsChanged] = useState(false);
   const [itemTitle, setItemTitle] = useState(null);
   const [itemPrice, setItemPrice] = useState(null);
+
+  function buyClick() {
+    addItemToCart(productIdSelected, selectedSize);
+    setCartItemsChanged(true);
+  }
 
   useEffect(() => {
     // Check if id is a number
@@ -31,14 +42,13 @@ function ItemDetail() {
     if (selectedColor == null) {
       setSelectedColor(unique[0]);
     }
-    if (setSelectedImage == null) {
-      setSelectedColor(unique[0]);
-    }
     const itemWithSelectedColor = items.find(item => item.product.color.includes(selectedColor) && item.images.length > 0);
     if (itemWithSelectedColor && itemWithSelectedColor.images[0].image) {
       setSelectedImage(itemWithSelectedColor.images[0].image);
+      setProductIdSelected(itemWithSelectedColor.product.id);
     } else {
       setSelectedImage(null);
+      setProductIdSelected(null);
     }
   }, [items, selectedColor]);
 
@@ -60,6 +70,29 @@ function ItemDetail() {
       });
   }, [id, navigate]);
 
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const cart_items = await fetchCartItems();
+        setCartItems(cart_items);
+        console.log(cart_items)
+      } catch (error) {
+        console.error('There was an error loading cart items', error);
+      }
+    };
+  
+    if (firstUpdate.current) {
+      getCartItems();
+      firstUpdate.current = false;
+      return;
+    }
+    
+    if (cartItemsChanged) {
+      getCartItems();
+      setCartItemsChanged(false);
+    }
+  }, [cartItemsChanged]);
+
   if (!items) {
     return <div>Item doesn't exist.</div>;
   }
@@ -68,7 +101,9 @@ function ItemDetail() {
     <div className="grid-container">
       <div className="left-content" />
       <div className="left-content">
-      <p>Column 2</p>
+        <div>
+          <Cart cartItems={cartItems} />
+        </div>
       </div>
       <div className="middle-content">
         <div>
@@ -102,7 +137,10 @@ function ItemDetail() {
               <img 
                 key={index}
                 src={"http://127.0.0.1:8000" + item.images[0].image}
-                onClick={() => setSelectedColor(color)}
+                onClick={() => {
+                  setSelectedColor(color)
+                  setProductIdSelected(item.product.id)
+                }}
                 alt="thumbnail"
                 className={color === selectedColor ? 'selected-thumbnail thumbnail-image' : 'thumbnail-image '}
               />
@@ -135,6 +173,8 @@ function ItemDetail() {
             })()}
           </div>
 
+
+
           <div className="shoe-sizes">
             {(() => {
               const sizes = [14, 15];
@@ -157,8 +197,10 @@ function ItemDetail() {
               });
             })()}
           </div>
+        </div>
 
-          
+        <div className="btn-container">
+          <button className="btn-buy" onClick={buyClick} disabled={!selectedSize}>Buy</button>
         </div>
 
       </div>

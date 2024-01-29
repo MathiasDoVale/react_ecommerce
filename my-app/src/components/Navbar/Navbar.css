@@ -27,3 +27,8 @@
   .navbar a:hover {
     color: #ddd;
   }
+
+  a:link, a:visited {
+    color: inherit;
+    text-decoration: none;
+  }
