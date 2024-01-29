@@ -1,7 +1,9 @@
 import React, { useState }  from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, useMatch, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useMatch, useLocation, Navigate } from 'react-router-dom';
 import ItemDetail from './components/ItemDetail/ItemDetail';
+import Signup from './pages/sign up/signup';
+import Login from './pages/login/login';
 import Navbar from './components/Navbar/Navbar';
 import LoginNavbar from './components/Navbar/LoginNavbar';
 import Catalog from './components/Catalog/Catalog';
@@ -12,15 +14,15 @@ function App() {
   const match = useMatch("/:id");
   
   function MainContent() {
+    
+    
     return (
       <Routes>
-        <Route path="/" element={<><Catalog gender={gender}/></>} />
-        <Route path="/:id" element={
-          <>
-            <ItemDetail />
-          </>
-          } 
-        />
+        <Route path="/" element={<Catalog gender={gender}/>} />
+        <Route path="/:id" element={<ItemDetail />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
   }

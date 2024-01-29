@@ -31,3 +31,7 @@
   .loginNavbar a:hover {
     color: #464646;
   }
+  a:link, a:visited {
+    color: inherit;
+    text-decoration: none;
+  }
